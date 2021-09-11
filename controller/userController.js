@@ -51,3 +51,18 @@ exports.register = async (req, res, next) => {
     next(`Error,${error.message}`)
   }
 }
+
+exports.getAll = async (req, res, next) => {
+  try {
+    const userAll = await asyncQuery(`CALL user_getAll()`)
+    res.json({
+      status: true,
+      users: userAll[0]
+    })
+  }
+  catch (error) {
+    console.log(`Error,${new Date()},${error.message}`)
+    next(`Error,${error.message}`)
+  }
+}
+
