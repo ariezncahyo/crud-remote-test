@@ -7,6 +7,8 @@ router.get('/', (req, res, next) => {
     res.send(`Welcome, ${new Date()}`)
 })
 
+router.post('/register', userController.register)
+
 router.get('*', function(req, res){
     res.status(404).send(`404 Error Not Found.`)
 })
