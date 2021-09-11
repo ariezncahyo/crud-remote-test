@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const schema = {
+const userSchema = {
     register: Joi.object({
         Name: Joi.string().max(50).required(),
         JobTitle: Joi.string().max(30),
@@ -8,6 +8,8 @@ const schema = {
         Location: Joi.string().max(30),
         Description: Joi.string(),
         Email: Joi.string().email({ tlds: { allow: false } }).required(),
-        Password: Joi.string().require()
+        Password: Joi.string().required()
     })
 }
+
+module.exports = userSchema
