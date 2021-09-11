@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/register', userController.register)
 router.get('/users', userController.getAll)
-
+router.delete('/users/delete', userController.delete)
 
 router.get('*', function(req, res){
     res.status(404).send(`404 Error Not Found.`)

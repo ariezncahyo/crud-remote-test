@@ -9,6 +9,9 @@ const userSchema = {
         Description: Joi.string(),
         Email: Joi.string().email({ tlds: { allow: false } }).required(),
         Password: Joi.string().required()
+    }),
+    deleteById: Joi.object({
+        Id: Joi.number().integer().required()
     })
 }
 

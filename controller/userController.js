@@ -66,3 +66,38 @@ exports.getAll = async (req, res, next) => {
   }
 }
 
+exports.delete = async (req, res, next) => {
+  try {
+    const body = req.body
+    const { error, value } = userSchema.deleteById.validate({
+      Id: body.Id
+    })
+
+    if (error) 
+      res.status(406).json({
+        status: false,
+        key: error.details[0].context.key,
+        message: error.details[0].message
+      })
+    else {
+      const delUser = await asyncQuery(`CALL user_delete(${value.Id})`)
+      
+      if (delUser.affectedRows > 0) {
+        res.json({
+          status: true,
+          message: `Delete User Berhasil.`
+        })
+      } else {
+        res.json({
+          status: false,
+          message: `Delete User Gagal.`
+        })
+      }
+    }
+  }
+  catch (error) {
+    console.log(`Error,${new Date()},${error.message}`)
+    next(`Error,${error.message}`)
+  }
+}
+
