@@ -101,3 +101,38 @@ exports.delete = async (req, res, next) => {
   }
 }
 
+exports.update = async (req, res, next) => {
+  try {
+    const body = req.body
+    const { error, value } = userSchema.update.validate({
+      Id: body.Id,
+      Password: body.Password
+    })
+
+    if (error) 
+      res.status(406).json({
+        status: false,
+        key: error.details[0].context.key,
+        message: error.details[0].message
+      })
+    else {
+      const updateUser = await asyncQuery(`CALL user_update(${value.Id}, ${value.Password})`)
+      
+      if (updateUser.affectedRows > 0) {
+        res.json({
+          status: true,
+          message: `Update User Berhasil.`
+        })
+      } else {
+        res.json({
+          status: false,
+          message: `Update User Gagal.`
+        })
+      }
+    }
+  }
+  catch (error) {
+    console.log(`Error,${new Date()},${error.message}`)
+    next(`Error,${error.message}`)
+  }
+}

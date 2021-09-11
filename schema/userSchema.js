@@ -12,6 +12,10 @@ const userSchema = {
     }),
     deleteById: Joi.object({
         Id: Joi.number().integer().required()
+    }),
+    update: Joi.object({
+        Id: Joi.number().integer().required(),
+        Password: Joi.string().min(8).required()
     })
 }
 
