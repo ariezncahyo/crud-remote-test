@@ -11,4 +11,5 @@ Backend CRUD menggunakan Node, Express, Mysql
 ```
 
 ## Documentation
-* Visit https://documenter.getpostman.com/view/9643342/U16krQcM
+* Visit https://documenter.getpostman.com/view/9643342/U16krQcM 
+* Video https://github.com/ariezncahyo/crud-remote-test/tree/main/dokumentasi
