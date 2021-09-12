@@ -2,6 +2,7 @@ const { promisify } = require('util')
 const db = require('../config/db')
 const asyncQuery = promisify(db.query).bind(db)
 const { generateToken } = require('../middleware/jwt')
+const { generatePasswordHash, verifyPaswordHash } = require('../utils/hash')
 const userSchema = require('../schema/userSchema')
 
 exports.register = async (req, res, next) => {
@@ -24,6 +25,8 @@ exports.register = async (req, res, next) => {
         message: error.details[0].message
       })
     else {
+      const passwordHash = await generatePasswordHash(value.Password)
+      
       const user = await asyncQuery(`CALL user_register(
         '${value.Name}',
         '${value.JobTitle}',
@@ -31,7 +34,7 @@ exports.register = async (req, res, next) => {
         '${value.Location}',
         '${value.Description}',
         '${value.Email}',
-        '${value.Password}'
+        '${passwordHash}'
       )`)
       
       if (user.affectedRows > 0) {
@@ -154,7 +157,8 @@ exports.login = async (req, res, next) => {
         message: error.details[0].message
       })
     else {
-      const login = await asyncQuery(`CALL user_login('${value.Email}','${value.Password}')`)
+      const verifyPassword = await verifyPaswordHash(value.Password)
+      const login = await asyncQuery(`CALL user_login('${value.Email}','${verifyPassword}')`)
       const token = await generateToken(login[0])
 
       if (login[0].length > 0) {
