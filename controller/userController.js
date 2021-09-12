@@ -1,6 +1,7 @@
 const { promisify } = require('util')
 const db = require('../config/db')
 const asyncQuery = promisify(db.query).bind(db)
+const { generateToken } = require('../middleware/jwt')
 const userSchema = require('../schema/userSchema')
 
 exports.register = async (req, res, next) => {
@@ -54,6 +55,7 @@ exports.register = async (req, res, next) => {
 
 exports.getAll = async (req, res, next) => {
   try {
+    console.log(req.user)
     const userAll = await asyncQuery(`CALL user_getAll()`)
     res.json({
       status: true,
@@ -127,6 +129,44 @@ exports.update = async (req, res, next) => {
         res.json({
           status: false,
           message: `Update User Gagal.`
+        })
+      }
+    }
+  }
+  catch (error) {
+    console.log(`Error,${new Date()},${error.message}`)
+    next(`Error,${error.message}`)
+  }
+}
+
+exports.login = async (req, res, next) => {
+  try {
+    const body = req.body
+    const { error, value } = userSchema.login.validate({
+      Email: body.Email,
+      Password: body.Password
+    })
+
+    if (error) 
+      res.status(406).json({
+        status: false,
+        key: error.details[0].context.key,
+        message: error.details[0].message
+      })
+    else {
+      const login = await asyncQuery(`CALL user_login('${value.Email}','${value.Password}')`)
+      const token = await generateToken(login[0])
+
+      if (login[0].length > 0) {
+        res.status(200).json({
+          status: true,
+          message: `Login Succeded.`,
+          token: token
+        })
+      } else {
+        res.status(401).json({
+          status: true,
+          message: `Login Failed.`
         })
       }
     }
