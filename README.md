@@ -11,4 +11,4 @@ Backend CRUD menggunakan Node, Express, Mysql
 ```
 
 ## Documentation
-<!-- https://documenter.getpostman.com/view/9643342/U16krQcM -->
+* Visit https://documenter.getpostman.com/view/9643342/U16krQcM
