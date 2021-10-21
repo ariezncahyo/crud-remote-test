@@ -33,3 +33,4 @@ DB_DEBUG=false
 ## Documentation
 * Visit https://documenter.getpostman.com/view/9643342/U16krQcM 
 * Video https://github.com/ariezncahyo/crud-remote-test/tree/main/dokumentasi
+* test
